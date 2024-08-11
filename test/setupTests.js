@@ -1,4 +1,4 @@
-const prisma = require("../src/utils/prisma")
+const prisma = require("../src/utils/prisma");
 
 const deleteTables = () => {
   const deleteTables = [
@@ -11,18 +11,18 @@ const deleteTables = () => {
   ];
 
   // Conditionally delete this table as this will only exist if "Extensions to the Extensions" bullet 2 is implemented
-  prisma.reviews && deleteTables.push(prisma.reviews.deleteMany())
-  return prisma.$transaction(deleteTables)
-}
+  prisma.reviews && deleteTables.push(prisma.reviews.deleteMany());
+  return prisma.$transaction(deleteTables);
+};
 
 global.beforeAll(() => {
-  return deleteTables()
-})
+  return deleteTables();
+});
 
 global.afterEach(() => {
-  return deleteTables()
-})
+  return deleteTables();
+});
 
 global.afterAll(() => {
-  return prisma.$disconnect()
-})
+  return prisma.$disconnect();
+});
