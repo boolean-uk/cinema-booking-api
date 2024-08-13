@@ -28,19 +28,19 @@ const getMoviedb = async (id) =>
     },
   });
 
-  const updatedMoviedb = async (id, title, runtimeMins) =>
-    await prisma.movie.update({
-      data: {
-        title,
-        runtimeMins,
-      },
-      where: {
-        id,
-      },
-      include: {
-        screenings: true,
-      },
-    });
+const updatedMoviedb = async (id, title, runtimeMins) =>
+  await prisma.movie.update({
+    data: {
+      title,
+      runtimeMins,
+    },
+    where: {
+      id,
+    },
+    include: {
+      screenings: true,
+    },
+  });
 
 module.exports = {
   getAllMoviesdb,
