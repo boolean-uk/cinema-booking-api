@@ -3,8 +3,8 @@ const { createdScreendb } = require("../domains/screens");
 
 const createScreen = async (req, res) => {
   try {
-    const { number } = req.body;
-    const createdScreen = await createdScreendb(number);
+    const { number, screenings } = req.body;
+    const createdScreen = await createdScreendb(number, screenings);
 
     res.status(201).json({ screen: createdScreen });
   } catch (err) {

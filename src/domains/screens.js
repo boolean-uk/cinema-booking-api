@@ -1,12 +1,25 @@
 const prisma = require("../utils/prisma");
 
+const createdScreendb = async (number, screenings) => {
+  const screenData = {
+    number,
+  };
 
-const createdScreendb = async (number) =>
-  await prisma.screen.create({
-    data: {
-      number,
+  if (screenings) {
+    screenData.screenings = {
+      createMany: {
+        data: screenings,
+      },
+    };
+  }
+
+  return await prisma.screen.create({
+    data: screenData,
+    include: {
+      screenings: true
     }
   });
+};
 
 
   module.exports = {
