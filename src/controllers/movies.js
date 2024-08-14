@@ -8,7 +8,9 @@ const {
 
 const getAllMovies = async(req, res) => {
     try {
-        const allMovies = await getAllMoviesdb();
+      const runtimeLt = Number(req.query.runtimeLt);
+      const runtimeGt = Number(req.query.runtimeGt);
+        const allMovies = await getAllMoviesdb(runtimeLt, runtimeGt);
 
         res.status(200).json({ movies: allMovies });
     } catch (err) {
