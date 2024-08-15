@@ -1,39 +1,50 @@
 {
-  "name": "cinema-booking-api",
-  "version": "1.0.0",
-  "description": "> API stands for Application Programming Interface, which is a set of definitions and protocols for building and integrating software. Simply put, they allow two pieces of software to communicate with each other through a pre-defined interface.",
-  "main": "index.js",
-  "scripts": {
-    "start": "npx nodemon ./src/index.js",
-    "test:migration": "node test/testDbMigration.js",
-    "test": "npx jest -i test/api/routes",
-    "test-extensions": "npx jest -i test/api/extensions --forceExit"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/boolean-uk/cinema-booking-api.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/boolean-uk/cinema-booking-api/issues"
-  },
-  "homepage": "https://github.com/boolean-uk/cinema-booking-api#readme",
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "nodemon": "^3.0.2",
-    "prisma": "^5.16.1",
-    "supertest": "^6.3.3"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.16.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "morgan": "^1.10.0"
-  }
+    "name": "cinema-booking-api",
+    "version": "1.0.0",
+    "description": "> API stands for Application Programming Interface, which is a set of definitions and protocols for building and integrating software. Simply put, they allow two pieces of software to communicate with each other through a pre-defined interface.",
+    "main": "index.ts",
+    "type": "module",
+    "scripts": {
+        "start": "npx nodemon --exec ts-node ./src/index.js",
+        "test:migration": "node test/testDbMigration.js",
+        "test": "npx jest -i test/api/routes --forceExit",
+        "test-extensions": "npx jest -i test/api/extensions --forceExit"
+    },
+    "prisma": {
+        "seed": "node prisma/seed.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/boolean-uk/cinema-booking-api.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/boolean-uk/cinema-booking-api/issues"
+    },
+    "homepage": "https://github.com/boolean-uk/cinema-booking-api#readme",
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/dotenv": "^6.1.1",
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/morgan": "^1.9.9",
+        "@types/node": "^22.3.0",
+        "@types/supertest": "^6.0.2",
+        "jest": "^29.7.0",
+        "nodemon": "^3.0.2",
+        "prisma": "^5.16.1",
+        "supertest": "^6.3.3",
+        "ts-jest": "^29.2.4",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.16.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "morgan": "^1.10.0"
+    }
 }
