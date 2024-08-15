@@ -53,7 +53,7 @@ const getMovieByID = async (req, res) => {
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError) {
       if (err.code === "P2025") {
-        return res.status(405).json({
+        return res.status(404).json({
           error: "A movie with that id does not exist",
         });
       }
@@ -84,7 +84,7 @@ const updateMovie = async (req, res) => {
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError) {
       if (err.code === "P2025") {
-        return res.status(405).json({
+        return res.status(404).json({
           error: "A movie with that id does not exist",
         });
       }
