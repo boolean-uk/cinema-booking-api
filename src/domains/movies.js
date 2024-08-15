@@ -35,7 +35,7 @@ const createMovieDb = async (title, runtimeMins, screenings) =>
     },
   });
 
-const updateMovieDb = async (reqId, title, runtimeMins) =>
+const updateMovieDb = async (reqId, title, runtimeMins, screenings) =>
   await prisma.movie.update({
     where: {
       id: reqId,
@@ -43,7 +43,16 @@ const updateMovieDb = async (reqId, title, runtimeMins) =>
     data: {
       title,
       runtimeMins,
+      screenings: screenings
+        ? {
+            create: screenings.map((screening) => ({
+              screenId: screening.screenId,
+              startsAt: screening.startsAt,
+            })),
+          }
+        : undefined,
     },
+    include: { screenings: true },
   });
 
 module.exports = {

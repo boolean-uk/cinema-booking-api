@@ -1,20 +1,19 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
-const { createScreenDb } = require("../domains/screens.js");
+const { createTicketDb } = require("../domains/tickets.js");
 
-const createScreen = async (req, res) => {
-  const { number, screenings } = req.body;
+const createTicket = async (req, res) => {
+  const { screeningId, customerId } = req.body;
 
-  if (!number) {
+  if (!screeningId || !customerId) {
     return res.status(400).json({
       error: "Missing fields in request body",
     });
   }
-  console.log(req.body);
 
   try {
-    const createdScreen = await createScreenDb(number, screenings);
+    const createdTicket = await createTicketDb(screeningId, customerId);
 
-    res.status(201).json({ screen: createdScreen });
+    res.status(201).json({ ticket: createdTicket });
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
@@ -27,5 +26,5 @@ const createScreen = async (req, res) => {
 };
 
 module.exports = {
-  createScreen,
+  createTicket,
 };

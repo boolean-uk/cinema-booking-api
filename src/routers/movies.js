@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 router.get("/", getMovies);
-router.get("/:identifier", getMovieById);
+router.get("/:id", getMovieById);
 router.post("/", createMovie);
 router.put("/:id", updateMovie);
 

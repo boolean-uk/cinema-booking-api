@@ -35,12 +35,12 @@ const getMovies = async (req, res) => {
 };
 
 const getMovieById = async (req, res) => {
-  const request = req.params.identifier;
+  const request = req.params.id;
 
   try {
     if (!isNaN(request)) {
       const reqId = +request;
-      const movie = await getMovieByIdDb(request);
+      const movie = await getMovieByIdDb(reqId);
       res.status(200).json({ movie: movie });
     } else if (isNaN(request)) {
       const movie = await getMovieByTitleDb(request);
@@ -80,7 +80,7 @@ const createMovie = async (req, res) => {
 };
 
 const updateMovie = async (req, res) => {
-  const { title, runtimeMins } = req.body;
+  const { title, runtimeMins, screenings } = req.body;
   const reqId = +req.params.id;
 
   if (!title || !runtimeMins) {
@@ -89,7 +89,12 @@ const updateMovie = async (req, res) => {
     });
   }
   try {
-    const updatedMovie = await updateMovieDb(reqId, title, runtimeMins);
+    const updatedMovie = await updateMovieDb(
+      reqId,
+      title,
+      runtimeMins,
+      screenings
+    );
 
     res.status(201).json({ movie: updatedMovie });
   } catch (e) {
@@ -98,7 +103,6 @@ const updateMovie = async (req, res) => {
         return res.status(409).json({ error: "" });
       }
     }
-    console.log(typeof req.body.runtimeMins);
 
     res.status(500).json({ error: e.message });
   }
