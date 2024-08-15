@@ -33,7 +33,7 @@ model Contact {
 model Movie {
   id          Int         @id @default(autoincrement())
   screenings  Screening[]
-  title       String
+  title       String @unique
   runtimeMins Int
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -41,7 +41,7 @@ model Movie {
 
 model Screen {
   id          Int @id @default(autoincrement())
-  number      Int
+  number      Int @unique
   screenings  Screening[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

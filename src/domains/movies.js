@@ -58,15 +58,16 @@ const createdMoviedb = async (title, runtimeMins, screenings) => {
   });
 };
 
-const getMoviedb = async (id) =>
-  await prisma.movie.findUnique({
+const getMoviedb = async (id) => {
+  return await prisma.movie.findUniqueOrThrow({
     where: {
-      id,
+     id,
     },
     include: {
       screenings: true,
     },
   });
+};
 
 const updatedMoviedb = async (id, title, runtimeMins, screenings) => {
   const movieData = {
