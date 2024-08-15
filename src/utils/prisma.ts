@@ -6,14 +6,14 @@ dotenv.config()
 let prisma: PrismaClient
 
 if (process.env.NODE_ENV === 'test') {
-    prisma = new PrismaClient({})
+    prisma = new PrismaClient({
+        log: ['query'],
+    })
     // Connect to the user's test database instance
     process.env['DATABASE_URL'] = process.env['TEST_DATABASE_URL']
     console.log(`Connected to DB instance: ${process.env['DATABASE_URL']}`)
 }
 
-prisma = new PrismaClient({
-    log: ['query'],
-})
+prisma = new PrismaClient()
 
 export default prisma

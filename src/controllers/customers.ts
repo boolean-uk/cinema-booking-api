@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import * as db from '../domains/customer'
+import * as db from '../domains/customers'
 import { Response, Request } from 'express'
 
 export const createCustomer = async (req: Request, res: Response) => {
