@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "npx nodemon --exec ts-node ./src/index.js",
-        "test:migration": "node test/testDbMigration.ts",
+        "test:migration": "npx ts-node test/testDbMigration.ts",
         "test": "npx jest -i test/api/routes --forceExit",
         "test-extensions": "npx jest -i test/api/extensions --forceExit"
     },
