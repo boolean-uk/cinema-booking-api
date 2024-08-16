@@ -6,7 +6,9 @@ const getAllMoviesdb = async (runtimeLt, runtimeGt) => {
     ...(runtimeLt && { lt: (runtimeLt) }),
     ...(runtimeGt && { gt: (runtimeGt) }),
   };
-
+   const currentDate = new Date();
+  
+  if (runtimeGt || runtimeLt) {
   return await prisma.movie.findMany({
     where: {
       runtimeMins: runTimeClauses,
@@ -15,7 +17,23 @@ const getAllMoviesdb = async (runtimeLt, runtimeGt) => {
       screenings: true,
     },
   });
-};
+} else {
+  return await prisma.movie.findMany({
+    where: {
+      screenings: {
+        some: {
+        startsAt: {
+          gt: currentDate
+        }
+      }
+    }
+    },
+    include: {
+      screenings: true,
+    },
+})
+}
+}
 
 const createdMoviedb = async (title, runtimeMins, screenings) => {
   const movieData = {
