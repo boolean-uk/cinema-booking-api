@@ -75,9 +75,8 @@ const updatedMoviedb = async (id, title, runtimeMins, screenings) => {
         data: screenings,
       }
     };
-
-    console.log("data", screenings);
   }
+  
   return await prisma.movie.update({
     data: movieData,
     where: {

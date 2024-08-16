@@ -1,4 +1,7 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client");
+const prisma = require("../utils/prisma");
+
+
 const {
   getAllMoviesdb,
   createdMoviedb,
@@ -72,6 +75,18 @@ const updateMovie = async (req, res) => {
     });
   }
 
+  const existingTitle = await prisma.movie.findUnique({
+    where: {
+      title: title,
+    },
+  });
+
+  if(existingTitle) {
+    return res.status(409).json({
+      error: "Title already exists",
+    });
+  }
+
   try {
     const updatedMovie = await updatedMoviedb(
       id,
@@ -86,14 +101,6 @@ const updateMovie = async (req, res) => {
       if (err.code === "P2025") {
         return res.status(404).json({
           error: "A movie with that id does not exist",
-        });
-      }
-    }
-
-    if (err instanceof PrismaClientKnownRequestError) {
-      if (err.code === "P2002") {
-        return res.status(409).json({
-          error: "A movie with the provided title already exists",
         });
       }
     }

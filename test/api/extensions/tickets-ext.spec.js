@@ -32,5 +32,26 @@ describe("Tickets Endpoint", () => {
         "john@test.com"
       );
     });
+
+    it("will return 404 if the movie with that id is not found", async () => {
+      const request = {
+        screeningId:  1000,
+        customerId: 1001
+      };
+
+      const response = await supertest(app).post(`/tickets`).send(request);
+
+      expect(response.status).toEqual(404);
+      expect(response.body).toHaveProperty("error");
+    });
+
+    it("will return 400 when there are missing fields in the request body", async () => {
+      const request = {};
+
+      const response = await supertest(app).post(`/tickets`).send(request);
+
+      expect(response.status).toEqual(400);
+      expect(response.body).toHaveProperty("error");
+    });
   });
 });
