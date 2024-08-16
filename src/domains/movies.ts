@@ -1,14 +1,8 @@
 import { Prisma } from '@prisma/client'
 import prisma from '../utils/prisma'
 
-export const getAllMovies = async (runtimeGt?: number, runtimeLt?: number) =>
+export const getAllMovies = async () =>
     await prisma.movie.findMany({
-        where: {
-            runtimeMins: {
-                gt: runtimeGt,
-                lt: runtimeLt,
-            },
-        },
         include: {
             screenings: true,
         },

@@ -2,15 +2,8 @@ import * as db from '../domains/movies'
 import { Response, Request } from 'express'
 
 export const getAllMovies = async (req: Request, res: Response) => {
-    const { runtimeGt } = req.query.runtimeGt as unknown as {
-        runtimeGt: number
-    }
-    const { runtimeLt } = req.query.runtimeLt as unknown as {
-        runtimeLt: number
-    }
-
     try {
-        const movies = await db.getAllMovies(runtimeGt, runtimeLt)
+        const movies = await db.getAllMovies()
 
         res.status(200).json({ movies: movies })
     } catch (e: any) {
