@@ -2,8 +2,15 @@ import * as db from '../domains/movies'
 import { Response, Request } from 'express'
 
 export const getAllMovies = async (req: Request, res: Response) => {
+    const { runtimeGt } = req.query.runtimeGt as unknown as {
+        runtimeGt: number
+    }
+    const { runtimeLt } = req.query.runtimeLt as unknown as {
+        runtimeLt: number
+    }
+
     try {
-        const movies = await db.getAllMovies()
+        const movies = await db.getAllMovies(runtimeGt, runtimeLt)
 
         res.status(200).json({ movies: movies })
     } catch (e: any) {
@@ -25,12 +32,16 @@ export const getMovieById = async (req: Request, res: Response) => {
 }
 
 export const createMovie = async (req: Request, res: Response) => {
-    const { title, runtimeMins } = req.body
+    const { title, runtimeMins, screenings } = req.body
 
     try {
-        const movie = await db.createMovie(title, runtimeMins)
-
-        res.status(201).json({ movie: movie })
+        if (screenings) {
+            const movie = await db.createMovie(title, runtimeMins, screenings)
+            res.status(201).json({ movie: movie })
+        } else {
+            const movie = await db.createMovie(title, runtimeMins)
+            res.status(201).json({ movie: movie })
+        }
     } catch (e: any) {
         res.status(500).json({ error: e.message })
         console.log(e.message)

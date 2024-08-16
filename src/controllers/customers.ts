@@ -30,7 +30,7 @@ export const createCustomer = async (req: Request, res: Response) => {
 
 export const updateCustomer = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id)
-    const { name } = req.body
+    const { name, contact } = req.body
 
     if (!name) {
         return res.status(400).json({
@@ -39,10 +39,16 @@ export const updateCustomer = async (req: Request, res: Response) => {
     }
 
     try {
-        const updatedCustomer = await db.updateCustomer(name, id)
-
-        res.status(201).json({ customer: updatedCustomer })
+        if (contact) {
+            const updatedCustomer = await db.updateCustomer(name, id, contact)
+            res.status(201).json({ customer: updatedCustomer })
+        } else {
+            const updatedCustomer = await db.updateCustomer(name, id)
+            res.status(201).json({ customer: updatedCustomer })
+        }
     } catch (e: any) {
-        res.status(500).json({ error: e.message })
+        res.status(404).json({
+            error: `Customer of id ${id} does not exist.`,
+        })
     }
 }

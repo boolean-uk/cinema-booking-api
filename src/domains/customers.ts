@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import prisma from '../utils/prisma'
 
 export const createCustomer = async (
@@ -20,13 +21,23 @@ export const createCustomer = async (
         },
     })
 
-export const updateCustomer = async (name: string, id: number) =>
+export const updateCustomer = async (
+    name: string,
+    id: number,
+    contact?: Prisma.ContactUpdateInput
+) =>
     await prisma.customer.update({
-        data: {
-            name,
-        },
         where: {
             id: id,
+        },
+        data: {
+            name: name,
+            contact: {
+                update: {
+                    phone: contact?.phone,
+                    email: contact?.email,
+                },
+            },
         },
         include: {
             contact: true,

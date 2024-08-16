@@ -4,7 +4,7 @@
     "description": "> API stands for Application Programming Interface, which is a set of definitions and protocols for building and integrating software. Simply put, they allow two pieces of software to communicate with each other through a pre-defined interface.",
     "main": "index.ts",
     "scripts": {
-        "start": "npx nodemon --exec ts-node ./src/index.js",
+        "start": "npx nodemon --exec ts-node ./src/index.ts",
         "test:migration": "npx ts-node test/testDbMigration.ts",
         "test": "npx jest -i test/api/routes --forceExit",
         "test-extensions": "npx jest -i test/api/extensions --forceExit"
