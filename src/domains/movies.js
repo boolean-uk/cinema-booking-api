@@ -1,40 +1,21 @@
 const prisma = require("../utils/prisma");
 
-const getAllMoviesdb = async (runtimeLt, runtimeGt) =>
-  await prisma.movie.findMany({
+const getAllMoviesdb = async (runtimeLt, runtimeGt) => {
+
+  const runTimeClauses = {
+    ...(runtimeLt && { lt: (runtimeLt) }),
+    ...(runtimeGt && { gt: (runtimeGt) }),
+  };
+
+  return await prisma.movie.findMany({
     where: {
-      //This means IF runtimeLt/runtimeGt has been added then apply the where clause, otherwise doe nothing. Adding this enables all movies to still be returned even if no runtimeLt/runtimeGt has been searched.
-      ...(runtimeLt || runtimeGt
-        ? {
-            // Using 'or' statment which means one or more conditions must return true. In this case either runtimeLt OR runtimeGt must be true/added.
-            OR: [
-              {
-                //This statement means that if runtimeLt query has been added then return all movies with a runtime less than (lt) runtimeLt. If NO runtimeLt has been searched, do nothing. This means code will not break if no runtimeLt is added. Gives the user options.
-                ...(runtimeLt
-                  ? {
-                      runtimeMins: {
-                        lt: runtimeLt,
-                      },
-                    }
-                  : {}),
-              },
-              {
-                ...(runtimeGt
-                  ? {
-                      runtimeMins: {
-                        gt: runtimeGt,
-                      },
-                    }
-                  : {}),
-              },
-            ],
-          }
-        : {}),
+      runtimeMins: runTimeClauses,
     },
     include: {
       screenings: true,
     },
   });
+};
 
 const createdMoviedb = async (title, runtimeMins, screenings) => {
   const movieData = {
@@ -59,14 +40,26 @@ const createdMoviedb = async (title, runtimeMins, screenings) => {
 };
 
 const getMoviedb = async (id) => {
-  return await prisma.movie.findUniqueOrThrow({
-    where: {
-     id,
-    },
-    include: {
-      screenings: true,
-    },
-  });
+  //NaN means if not a number. !Nan means if a number.
+  if (!isNaN(id)) {
+    return await prisma.movie.findUniqueOrThrow({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        screenings: true,
+      },
+    });
+  } else {
+    return await prisma.movie.findUniqueOrThrow({
+      where: {
+        title: id,
+      },
+      include: {
+        screenings: true,
+      },
+    });
+  }
 };
 
 const updatedMoviedb = async (id, title, runtimeMins, screenings) => {

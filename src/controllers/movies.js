@@ -46,7 +46,7 @@ const createMovie = async (req, res) => {
 
 const getMovieByID = async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = req.params.id;
   
     const movie = await getMoviedb(id);
     res.status(200).json({ movie: movie });
