@@ -9,7 +9,6 @@ const createScreen = async (req, res) => {
       error: "Missing fields in request body",
     });
   }
-  console.log(req.body);
 
   try {
     const createdScreen = await createScreenDb(number, screenings);
@@ -18,7 +17,9 @@ const createScreen = async (req, res) => {
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return res.status(409).json({ error: "" });
+        return res
+          .status(409)
+          .json({ error: "A screen with the provided number already exists." });
       }
     }
 

@@ -41,6 +41,11 @@ const getMovieById = async (req, res) => {
     if (!isNaN(request)) {
       const reqId = +request;
       const movie = await getMovieByIdDb(reqId);
+      if (!movie) {
+        return res
+          .status(404)
+          .json({ error: "A movie with that id or title does not exist." });
+      }
       res.status(200).json({ movie: movie });
     } else if (isNaN(request)) {
       const movie = await getMovieByTitleDb(request);
@@ -57,13 +62,14 @@ const getMovieById = async (req, res) => {
 
 const createMovie = async (req, res) => {
   const { title, runtimeMins, screenings } = req.body;
-  console.log(screenings);
+  console.log(req.body);
 
   if (!title || !runtimeMins) {
     return res.status(400).json({
       error: "Missing fields in request body",
     });
   }
+
   try {
     const createdMovie = await createMovieDb(title, runtimeMins, screenings);
 
@@ -71,7 +77,9 @@ const createMovie = async (req, res) => {
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return res.status(409).json({ error: "" });
+        return res
+          .status(409)
+          .json({ error: "A movie with the provided title already exists." });
       }
     }
 
@@ -95,12 +103,19 @@ const updateMovie = async (req, res) => {
       runtimeMins,
       screenings
     );
+    if (!updatedMovie) {
+      return res.status(404).json({
+        error: "A movie with that id does not exist.",
+      });
+    }
 
     res.status(201).json({ movie: updatedMovie });
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return res.status(409).json({ error: "" });
+        return res
+          .status(409)
+          .json({ error: "A movie with the provided title already exists." });
       }
     }
 

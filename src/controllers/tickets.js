@@ -15,6 +15,13 @@ const createTicket = async (req, res) => {
 
     res.status(201).json({ ticket: createdTicket });
   } catch (e) {
+    if (e.message === "id not found") {
+      return res
+        .status(404)
+        .json({
+          error: "A customer or screening does not exist with the provided id.",
+        });
+    }
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
         return res.status(409).json({ error: "" });

@@ -55,13 +55,19 @@ const updateCustomer = async (req, res) => {
   try {
     const updatedCustomer = await updateCustomerDb(reqId, name, contact);
 
+    if (!updatedCustomer) {
+      return res.status(404).json({
+        error: "A customer with that id does not exist.",
+      });
+    }
+
     res.status(200).json({ customer: updatedCustomer });
   } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      if (e.code === "P2002") {
-        return res.status(409).json({ error: "" });
-      }
-    }
+    // if (e instanceof PrismaClientKnownRequestError) {
+    //   if (e.code === "P2002") {
+    //     return res.status(409).json({ error: "" });
+    //   }
+    // }
 
     res.status(500).json({ error: e.message });
   }
