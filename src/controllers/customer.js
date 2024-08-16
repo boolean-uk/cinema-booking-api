@@ -1,18 +1,17 @@
-const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createCustomerDb } = require('../domains/customer.js')
+const { PrismaClientKnownRequestError } = require("@prisma/client");
+const {
+  createCustomerDb,
+  updateCustomerDb,
+} = require("../domains/customer.js");
 
 const createCustomer = async (req, res) => {
-  const {
-    name,
-    phone,
-    email
-  } = req.body
+  const { name, phone, email } = req.body;
 
-  if (!name || !phone || !email) {
-    return res.status(400).json({
-      error: "Missing fields in request body"
-    })
-  }
+  // if (!name || !contact) {
+  //   return res.status(400).json({
+  //     error: "Missing fields in request body",
+  //   });
+  // }
 
   // Try-catch is a very common way to handle errors in JavaScript.
   // It allows us to customise how we want errors that are thrown to be handled.
@@ -22,9 +21,9 @@ const createCustomer = async (req, res) => {
   // instead of the Prisma error being thrown (and the app potentially crashing) we exit the
   // `try` block (bypassing the `res.status` code) and enter the `catch` block.
   try {
-    const createdCustomer = await createCustomerDb(name, phone, email)
+    const createdCustomer = await createCustomerDb(name, phone, email);
 
-    res.status(201).json({ customer: createdCustomer })
+    res.status(201).json({ customer: createdCustomer });
   } catch (e) {
     // In this catch block, we are able to specify how different Prisma errors are handled.
     // Prisma throws errors with its own codes. P2002 is the error code for
@@ -35,14 +34,46 @@ const createCustomer = async (req, res) => {
     // HTTP error codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return res.status(409).json({ error: "A customer with the provided email already exists" })
+        return res
+          .status(409)
+          .json({ error: "A customer with the provided email already exists" });
       }
     }
 
-    res.status(500).json({ error: e.message })
+    res.status(500).json({ error: e.message });
   }
-}
+};
+
+const updateCustomer = async (req, res) => {
+  const { name, contact } = req.body;
+  const reqId = +req.params.id;
+  if (!name) {
+    return res.status(400).json({
+      error: "Missing fields in request body",
+    });
+  }
+  try {
+    const updatedCustomer = await updateCustomerDb(reqId, name, contact);
+
+    if (!updatedCustomer) {
+      return res.status(404).json({
+        error: "A customer with that id does not exist.",
+      });
+    }
+
+    res.status(200).json({ customer: updatedCustomer });
+  } catch (e) {
+    // if (e instanceof PrismaClientKnownRequestError) {
+    //   if (e.code === "P2002") {
+    //     return res.status(409).json({ error: "" });
+    //   }
+    // }
+
+    res.status(500).json({ error: e.message });
+  }
+};
 
 module.exports = {
-  createCustomer
-}
+  createCustomer,
+  updateCustomer,
+};
