@@ -1,39 +1,38 @@
 const prisma = require("../utils/prisma");
 
 const getAllMoviesdb = async (runtimeLt, runtimeGt) => {
-
   const runTimeClauses = {
-    ...(runtimeLt && { lt: (runtimeLt) }),
-    ...(runtimeGt && { gt: (runtimeGt) }),
+    ...(runtimeLt && { lt: runtimeLt }),
+    ...(runtimeGt && { gt: runtimeGt }),
   };
-   const currentDate = new Date();
-  
+  const currentDate = new Date();
+
   if (runtimeGt || runtimeLt) {
-  return await prisma.movie.findMany({
-    where: {
-      runtimeMins: runTimeClauses,
-    },
-    include: {
-      screenings: true,
-    },
-  });
-} else {
-  return await prisma.movie.findMany({
-    where: {
-      screenings: {
-        some: {
-        startsAt: {
-          gt: currentDate
-        }
-      }
-    }
-    },
-    include: {
-      screenings: true,
-    },
-})
-}
-}
+    return await prisma.movie.findMany({
+      where: {
+        runtimeMins: runTimeClauses,
+      },
+      include: {
+        screenings: true,
+      },
+    });
+  } else {
+    return await prisma.movie.findMany({
+      // where: {
+      //   screenings: {
+      //     some: {
+      //     startsAt: {
+      //       gt: currentDate
+      //     }
+      //   }
+      // }
+      // },
+      include: {
+        screenings: true,
+      },
+    });
+  }
+};
 
 const createdMoviedb = async (title, runtimeMins, screenings) => {
   const movieData = {
@@ -89,12 +88,12 @@ const updatedMoviedb = async (id, title, runtimeMins, screenings) => {
   if (screenings) {
     movieData.screenings = {
       deleteMany: {},
-      createMany:  {
+      createMany: {
         data: screenings,
-      }
+      },
     };
   }
-  
+
   return await prisma.movie.update({
     data: movieData,
     where: {
