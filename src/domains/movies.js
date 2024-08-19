@@ -2,9 +2,20 @@ const prisma = require("../utils/prisma");
 
 const getAllMoviesdb = async (runtimeLt, runtimeGt) => {
   const runTimeClauses = {
-    ...(runtimeLt && { lt: runtimeLt }),
-    ...(runtimeGt && { gt: runtimeGt }),
+    ...(runtimeLt
+      ? {
+          lt: runtimeLt,
+        }
+      : {}),
+
+    ...(runtimeGt
+      ? {
+          gt: runtimeGt,
+        }
+      : {}),
   };
+
+  console.log("run time clauses", runTimeClauses);
   const currentDate = new Date();
 
   if (runtimeGt || runtimeLt) {
