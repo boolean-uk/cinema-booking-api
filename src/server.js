@@ -15,8 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 // Tell express to use your routers here
 const customersRouter = require("./routers/customers");
 const moviesRouter = require("./routers/movies");
+const screensRouter = require("./routers/screens");
 const prisma = require("./utils/prisma");
 app.use("/customers", customersRouter);
 app.use("/movies", moviesRouter);
+app.use("/screens", screensRouter);
 
 module.exports = app;
