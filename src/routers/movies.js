@@ -8,20 +8,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   // GET ALL THE MOVIES AND THEIR SCREENINGS
-  const response = [];
 
-  const movies = await prisma.movie.findMany(); // GET ALL MOVIES
+  const response = await prisma.movie.findMany({
+    include: { screenings: true },
+  }); // GET ALL MOVIES
 
-  for (const movie of movies) {
-    const screening = await prisma.screening.findMany({
-      // GET SCREENINGS FOR CURRENT MOVIE
-      where: { movieId: movie.id },
-    });
-
-    movie.screenings = screening; // ADD SCREENINGS FIELD INTO THE CURRENT MOVIE OBJECT
-
-    response.push(movie); // ADD MOVIE INTO THE RESPONSE ARRAY
-  }
   res.json({ movies: response });
 });
 
@@ -33,16 +24,8 @@ router.get("/:id", async (req, res) => {
       where: {
         id: Number(req.params.id),
       },
+      include: { screenings: true },
     });
-
-    // TRY TO GET THE SCREENINGS
-    const screenings = await prisma.screening.findMany({
-      // GET SCREENINGS FOR CURRENT MOVIE
-      where: { movieId: movie.id },
-    });
-
-    movie.screenings = screenings; // ADD SCREENINGS FIELD INTO THE CURRENT MOVIE OBJECT
-    // IF THERE ARE NO SCREENINGS IT WILL DISPLAY THE FOLLOWING MESSAGE
 
     res.json({ movie });
   } catch (error) {
@@ -60,14 +43,8 @@ router.post("/", async (req, res) => {
       title: req.body.title,
       runtimeMins: req.body.runtimeMins,
     },
+    include: { screenings: true },
   });
-
-  const screening = await prisma.screening.findMany({
-    //FINDS SCREENINGS IF THE CREATED MOVIE HAS ANY
-    where: { movieId: movie.id },
-  });
-
-  movie.screenings = screening; // ADD SCREENINGS FIELD INTO THE CURRENT MOVIE OBJECT
 
   res.status(201).json({ movie: movie });
 });
@@ -86,6 +63,7 @@ router.put("/:id", async (req, res) => {
         title: req.body.title,
         runtimeMins: req.body.runtimeMins,
       },
+      include: { screenings: true },
     });
 
     res.status(201).json({ movie });
