@@ -6,28 +6,29 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 model Customer {
-  id          Int       @id @default(autoincrement())
-  name        String
-  contact     Contact?
-  tickets     Ticket[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  contact   Contact?
+  tickets   Ticket[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Contact {
-  id          Int       @id @default(autoincrement())
-  customer    Customer  @relation(fields: [customerId], references: [id])
-  customerId  Int       @unique
-  phone       String
-  email       String    @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique
+  phone      String
+  email      String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Movie {
@@ -40,31 +41,31 @@ model Movie {
 }
 
 model Screen {
-  id          Int @id @default(autoincrement())
-  number      Int
-  screenings  Screening[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id         Int         @id @default(autoincrement())
+  number     Int
+  screenings Screening[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model Screening {
-  id          Int       @id @default(autoincrement())
-  tickets     Ticket[]
-  movie       Movie     @relation(fields: [movieId], references: [id])
-  movieId     Int
-  screen      Screen    @relation(fields: [screenId], references: [id])
-  screenId    Int
-  startsAt    DateTime
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  tickets   Ticket[]
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   Int
+  screen    Screen   @relation(fields: [screenId], references: [id])
+  screenId  Int
+  startsAt  DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Ticket {
-  id            Int       @id @default(autoincrement())
-  screening     Screening @relation(fields: [screeningId], references: [id])
-  screeningId   Int
-  customer      Customer  @relation(fields: [customerId], references: [id])
-  customerId    Int
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  screening   Screening @relation(fields: [screeningId], references: [id])
+  screeningId Int
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  customerId  Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
