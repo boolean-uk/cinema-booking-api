@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 const customerRouter = require('./routers/customer');
 const moviesRouter = require("./routers/movies");
 const screensRouter = require("./routers/screens");
-const prisma = require("./utils/prisma");
+// const prisma = require("./utils/prisma");
 
 app.use('/customers', customerRouter);
 app.use('/movies', moviesRouter);
