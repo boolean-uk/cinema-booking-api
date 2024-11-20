@@ -1,61 +1,70 @@
 # Cinema Booking API
 
-> API stands for Application Programming Interface, which is a set of definitions and protocols for building and integrating software. Simply put, they allow two pieces of software to communicate with each other through a pre-defined interface.
-
-## Learning Objectives
-
-- Design and build a database-backend API
-
 ## Introduction
 
-So far, we've designed a database structure for a cinema booking system and implemented that design using an ORM. The next step is to build an API that allows the cinema and its customers to interact with the database.
+This project demonstrates my skill to create a working RESTful API using PostgreSQL and Prisma. The API allows interaction with a cinema booking system database and can be tested using tools like Postman.
 
-Frontend applications usually won't interact with a database directly, especially if it's a web app; they'll instead send instructions to a server which will process those instructions and give back a response. We decide how the server receives instructions, processes them and responds back by creating an API.
+## Installation
 
-## Setting up
+1. Clone the repository:
 
-The full database schema and seed file for this exercise has already been implemented, your focus is on building the API itself.
+   ```bash
+   git clone https://github.com/AtikoSpeed/database-cinema-booking-api
+   ```
 
-**Note: Although we need to create a new primary database, we can reuse a shadow database across multiple projects since Prisma resets it after using it.**
+2. Navigate to the project directory:
 
-1. Rename the `.env.example` file to `.env`
-2. Edit the `DATABASE_URL` variable in `.env`, swapping `YOUR_DATABASE_URL` for the URL of your database
-3. Create another separate **TEST** database instance; you may need to use a different cloud provider as some only allow one instance per free account. [Supabase](https://supabase.com/) may be a good option
-4. Edit the `TEST_DATABASE_URL` variable in `.env`, swapping `YOUR_TEST_DB_URL` for the URL of the separate **TEST** database instance you just created
-7. Run `npm ci` to install the project dependencies.
-8. Run `npx prisma migrate reset` to execute the existing migrations & data seed. Press `y` when it asks if you're sure.
+   ```bash
+   cd database-cinema-booking-api
+   ```
 
-## Instructions
+3. Install dependencies:
 
-- Run the app with `npm start`
-- Work through each route detailed in the [API Spec](https://boolean-uk.github.io/database-cinema-booking-api/standard).
+   ```bash
+   npm ci
+   ```
 
-## Extensions
+4. I've included my own .env file for demonstration purposes. **This is temporary and will be deleted**
 
-- Work through each route detailed in the [extended API Spec](https://boolean-uk.github.io/database-cinema-booking-api/extensions). This will require making changes to your existing routes, creating error responses for certain situations, and introducing a new route.
-- You will need to create your own tests for these endpoints. Use the existing test provided in `test/api/extensions` as a guide.
+5. Reset Prisma migrations and set up the database schema:
 
-## Extensions to the Extensions
+   ```bash
+   npx prisma migrate reset --force
+   ```
 
-- Change your movie list GET route to only respond with movies that have a future screening time
-- Add the ability for customers to leave reviews on movies
-    - This will require a new entity in your diagram, schema file and seed file. Remember the `npx prisma generate`, `npx prisma migrate dev --create-only --skip-seed --name reviews` and `npx prisma migrate reset` commands from an earlier exercise!
-- You will need to create your own tests for these endpoints. Use the existing test provided in `test/api/extensions` as a guide.
-    - If you create the new `Review` entity, then you will also need to re-run `npm run test:migration` so that your test database runs the migration to create this table. Do this AFTER you have created the new migration file.
+## Usage
 
-## Testing your work
+Start the server:
 
-- First, make sure you have created / setup the test database instance and env var, as described in the "Setting Up" section.
-- Next, run the command `npm run test:migration` - this will run the schema migrations against the test database. **You only need to do this the one time.**
+```bash
+npm start
+```
 
-Now, whenever you want to run tests locally:  
-- Run the test suite with `npm test` for core requirements.
-- Run the extension test suite with `npm run test-extensions`.
-    - When working on extensions, create your own tests by using the one provided in `test/api/extensions` as a guide.
+## Testing with Postman
 
-So far, you may have been using `curl` to manually test your API endpoints. You can continue to use this approach if you choose, or you can download a tool to make things a little easier. There are two main options:
+Use Postman or any other API client to interact with the API endpoints. The available endpoints are:
 
-- [Insomnia](https://insomnia.rest/download) (recommended)
-- [Postman](https://www.postman.com/)
+### Movies
 
-These tools are quite similar to your web browser but have some additional functionality to make structuring API requests easier.
+- `GET /movies` - Retrieve a list of movies along with their screenings.
+- `GET /movies/{id}` - Retrieve a specific movie by ID along with its screenings.
+- `POST /movies` - Create a new movie.
+- `PUT /movies/{id}` - Update an existing movie.
+- `DELETE /movies/{id}` - Delete a movie.
+
+### Customers
+
+- `POST /customers/register` - Register a new customer.
+- `PUT /customers/{id}` - Update a customer's information.
+
+### Screens
+
+- `POST /screens` - Create a new screen.
+
+## Technologies Used
+
+- Node.js
+- Express.js
+- PostgreSQL
+- Prisma ORM
+- Postman (for testing)
